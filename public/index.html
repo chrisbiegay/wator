@@ -15,27 +15,27 @@
     <div id="tools">
         <div>
             <label for="fish-initial-count">Initial fish count:</label>
-            <input type="number" id="fish-initial-count">
+            <input type="number" id="fish-initial-count" class="param">
         </div>
         <div>
             <label for="shark-initial-count">Initial shark count:</label>
-            <input type="number" id="shark-initial-count">
+            <input type="number" id="shark-initial-count" class="param">
         </div>
         <div>
             <label for="fish-reproduction-period">Fish reproduction period:</label>
-            <input type="number" id="fish-reproduction-period">
+            <input type="number" id="fish-reproduction-period" class="param"> chronons
         </div>
         <div>
             <label for="shark-reproduction-period">Shark reproduction period:</label>
-            <input type="number" id="shark-reproduction-period">
+            <input type="number" id="shark-reproduction-period" class="param"> chronons
         </div>
         <div>
             <label for="max-shark-energy">Max shark energy:</label>
-            <input type="number" id="max-shark-energy">
+            <input type="number" id="max-shark-energy" class="param"> chronons
         </div>
         <div>
             <label for="shark-energy-per-fish">Shark energy per fish eaten:</label>
-            <input type="number" id="shark-energy-per-fish">
+            <input type="number" id="shark-energy-per-fish" class="param"> chronons
         </div>
         <br>
         <div>
@@ -75,6 +75,9 @@
             <li>If a shark moves to a square occupied by a fish, it eats the fish and earns a certain amount of energy.</li>
             <li>Once a shark has survived a certain number of chronons it may reproduce in exactly the same way as the fish.</li>
         </ul>
+    </div>
+    <div>
+        (<a href="https://github.com/chrisbiegay/wator">Source code</a>)
     </div>
 
     <script src="main.js"></script>
