@@ -1,2 +1,6 @@
-# wator
-A population and ecology simulation based on the paper by A. K. Dewdney.
+# Wa-Tor
+
+A population and ecology simulation.  See https://en.wikipedia.org/wiki/Wa-Tor
+
+## Usage
+Open **public/index.html** in a web browser.

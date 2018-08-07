@@ -1,0 +1,50 @@
+#main-canvas {
+    border: 1px solid black;
+    float: left;
+}
+
+#tools {
+    float:left;
+    margin-left: 10px;
+}
+
+#rules {
+    margin-top: 20px;
+    width: 800px;
+}
+
+#legend {
+    clear: both;
+    padding-top: 10px;
+}
+
+.animal-box {
+    float: left;
+    border: 1px solid black;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+    position: relative;
+    top: 2px;
+}
+
+.animal-box.fish {
+    background-color: #00EE00;
+}
+
+.animal-box.shark {
+    background-color: #0000FF;
+}
+
+.legend-label {
+    float: left;
+}
+
+.subtitle {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
