@@ -7,79 +7,86 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body onload="wator.start()">
-    <h1>Wa-Tor</h1>
-    <div class="subtitle"><a href="https://en.wikipedia.org/wiki/Wa-Tor">An ecology simulation</a></div>
-    <canvas id="main-canvas" width="400" height="400">
-        This component requires a modern browser that supports &lt;canvas&gt;.
-    </canvas>
-    <div id="tools">
-        <div>
-            <label for="fish-initial-count">Initial fish count:</label>
-            <input type="number" id="fish-initial-count" class="param">
+    <div class="page-box">
+        <h1>Wa-Tor</h1>
+        <hr>
+        <p class="abstract">
+            Wa-Tor is an ecology simulation devised by <a href="http://www.csd.uwo.ca/faculty/akd/akd.html">Alexander Dewdney</a>
+            which describes a world of fish and sharks.  Each animal moves about and reproduces, and the sharks eat the fish or
+            die if they can't eat enough.  Below is an implementation of Wa-Tor written in JavaScript (ES5) using the HTML Canvas
+            API.  The parameters of the simulation can be adjusted using the fields to the right.
+        </p>
+        <canvas id="main-canvas" width="400" height="400">
+            This component requires a modern browser that supports &lt;canvas&gt;.
+        </canvas>
+        <div id="tools">
+            <div>
+                <label for="fish-initial-count">Initial fish count:</label>
+                <input type="number" id="fish-initial-count" class="param">
+            </div>
+            <div>
+                <label for="shark-initial-count">Initial shark count:</label>
+                <input type="number" id="shark-initial-count" class="param">
+            </div>
+            <div>
+                <label for="fish-reproduction-period">Fish reproduction period:</label>
+                <input type="number" id="fish-reproduction-period" class="param"> chronons
+            </div>
+            <div>
+                <label for="shark-reproduction-period">Shark reproduction period:</label>
+                <input type="number" id="shark-reproduction-period" class="param"> chronons
+            </div>
+            <div>
+                <label for="max-shark-energy">Max shark energy:</label>
+                <input type="number" id="max-shark-energy" class="param"> chronons
+            </div>
+            <div>
+                <label for="shark-energy-per-fish">Shark energy per fish eaten:</label>
+                <input type="number" id="shark-energy-per-fish" class="param"> chronons
+            </div>
+            <br>
+            <div>
+                <button onclick="wator.loadValuesFromUI()">Apply</button>
+            </div>
+            <div>
+                <button onclick="wator.resetWorld()">Apply and Restart</button>
+            </div>
+            <div>
+                <button onclick="wator.pausePlay()">Pause/Play</button>
+            </div>
         </div>
-        <div>
-            <label for="shark-initial-count">Initial shark count:</label>
-            <input type="number" id="shark-initial-count" class="param">
-        </div>
-        <div>
-            <label for="fish-reproduction-period">Fish reproduction period:</label>
-            <input type="number" id="fish-reproduction-period" class="param"> chronons
-        </div>
-        <div>
-            <label for="shark-reproduction-period">Shark reproduction period:</label>
-            <input type="number" id="shark-reproduction-period" class="param"> chronons
-        </div>
-        <div>
-            <label for="max-shark-energy">Max shark energy:</label>
-            <input type="number" id="max-shark-energy" class="param"> chronons
-        </div>
-        <div>
-            <label for="shark-energy-per-fish">Shark energy per fish eaten:</label>
-            <input type="number" id="shark-energy-per-fish" class="param"> chronons
+        <div id="legend">
+            <div class="animal-box fish"></div><div class="legend-label">Fish</div>
+            <br>
+            <div class="animal-box shark"></div><div class="legend-label">Shark</div>
         </div>
         <br>
-        <div>
-            <button onclick="wator.loadValuesFromUI()">Apply</button>
+        <div id="rules">
+            <h3>Rules for the fish</h3>
+
+            <ul>
+                <li>At each turn or "chronon," a fish randomly moves to adjacent unoccupied square.
+                    If there are no unoccupied squares the fish stays on the same square.</li>
+                <li>A fish will reproduce after a certain number of chronons.  It does this by moving to an adjacent
+                    square and leaving a new fish in the old square.  Its reproduction counter is then reset to zero.</li>
+            </ul>
+
+            <h3>Rules for the sharks</h3>
+
+            <ul>
+                <li>At each chronon a shark moves to an adjacent square occupied by a fish, if possible.  If there are no adjacent
+                    fish the shark moves to a random adjacent square unoccupied by another shark, and if there are no available
+                    squares the shark does not move.</li>
+                <li>If a shark moves to a square occupied by a fish, it "eats" the fish and gains a certain amount of energy.</li>
+                <li>At each chronon a shark loses a unit of energy.  If a shark reaches zero energy, it dies and is removed.</li>
+                <li>Sharks reproduce in the same way as fish, although possibly at a different rate.</li>
+            </ul>
         </div>
         <div>
-            <button onclick="wator.resetWorld()">Apply and Restart</button>
+            (<a href="https://github.com/chrisbiegay/wator">Source code</a>)
         </div>
-        <div>
-            <button onclick="wator.pausePlay()">Pause/Play</button>
-        </div>
-    </div>
-    <div id="legend">
-        <div class="animal-box fish"></div><div class="legend-label">Fish</div>
-        <br>
-        <div class="animal-box shark"></div><div class="legend-label">Shark</div>
-    </div>
-    <br>
-    <div id="rules">
-        <h3>Rules for the fish</h3>
 
-        <ul>
-            <li>At each "chronon," a fish moves randomly to one of the adjacent unoccupied squares.
-                If there are no free squares, no movement takes place.</li>
-            <li>Once a fish has survived a certain number of chronons it may reproduce. This is done as it moves to a
-                neighboring square, leaving behind a new fish in its old position. Its reproduction time is also reset
-                to zero.</li>
-        </ul>
-
-        <h3>Rules for the sharks</h3>
-
-        <ul>
-            <li>At each chronon, a shark moves randomly to an adjacent square occupied by a fish. If there is none,
-                the shark moves to a random adjacent unoccupied square. If there are no free squares, no movement takes place.</li>
-            <li>At each chronon, each shark is deprived of a unit of energy.</li>
-            <li>Upon reaching zero energy, a shark dies.</li>
-            <li>If a shark moves to a square occupied by a fish, it eats the fish and earns a certain amount of energy.</li>
-            <li>Once a shark has survived a certain number of chronons it may reproduce in exactly the same way as the fish.</li>
-        </ul>
+        <script src="main.js"></script>
     </div>
-    <div>
-        (<a href="https://github.com/chrisbiegay/wator">Source code</a>)
-    </div>
-
-    <script src="main.js"></script>
 </body>
 </html>
