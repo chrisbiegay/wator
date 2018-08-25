@@ -60,12 +60,22 @@ var wator = {};
     };
 
     wator.loadValuesFromUI = function() {
+        var oldInitialFishCount = initialFishCount;
+        var oldInitialSharkCount = initialSharkCount;
+        
         initialFishCount = parseInt(document.getElementById('fish-initial-count').value, 10);
         initialSharkCount = parseInt(document.getElementById('shark-initial-count').value, 10);
         fishReproductionPeriod = parseInt(document.getElementById('fish-reproduction-period').value, 10);
         sharkReproductionPeriod = parseInt(document.getElementById('shark-reproduction-period').value, 10);
         maxSharkEnergy = parseInt(document.getElementById('max-shark-energy').value, 10);
         sharkEnergyPerFish = parseInt(document.getElementById('shark-energy-per-fish').value, 10);
+
+        if (initialFishCount + initialSharkCount > SQUARES_WIDE * SQUARES_TALL) {
+            initialFishCount = oldInitialFishCount;
+            initialSharkCount = oldInitialSharkCount;
+            wator.populateUIFields();
+            console.log("Initial counts of fish and sharks exceeded the grid size");
+        }
     };
 
     wator.resetWorld = function() {
