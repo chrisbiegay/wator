@@ -24,12 +24,12 @@ var wator = {};
     var DOWN = 2;
     var LEFT = 3;
 
-    var initialFishCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 20);
+    var initialFishCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 6);
     var initialSharkCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 200);
     var fishReproductionPeriod = 130;
-    var sharkReproductionPeriod = 300;
+    var sharkReproductionPeriod = 50;
     var sharkEnergyPerFish = 2;
-    var maxSharkEnergy = 200;
+    var maxSharkEnergy = 48;
     var canvas;
 
     wator.start = function() {
