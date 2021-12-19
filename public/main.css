@@ -1,3 +1,31 @@
+:root {
+    --base-font-size-desktop: 16px;
+    --base-font-size-mobile: 50px;
+}
+
+html {
+    font-size: var(--base-font-size-desktop);
+    font-family: sans-serif;
+    line-height: 1.25;
+}
+
+h1 {
+    font-family: 'Linux Libertine','Georgia','Times',serif;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+h3 {
+    font-family: 'Linux Libertine','Georgia','Times',serif;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-bottom: 4px;
+}
+
 .abstract {
     margin-top: 0;
     margin-bottom: 20px;
@@ -21,32 +49,6 @@
     background-color: #0000FF;
 }
 
-body {
-    font-size: 13pt;
-    font-family: sans-serif;
-    line-height: 1.25;
-}
-
-button {
-    font-size: 11pt;
-    margin-bottom: 4px;
-}
-
-h1 {
-    font-family: 'Linux Libertine','Georgia','Times',serif;
-    font-weight: normal;
-    margin-bottom: 5px;
-    font-family: serif;
-}
-
-h3 {
-    font-family: 'Linux Libertine','Georgia','Times',serif;
-    font-weight: normal;
-    font-size: 18pt;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 #legend {
     clear: both;
     padding-top: 20px;
@@ -61,6 +63,10 @@ h3 {
     float: left;
 }
 
+.mobile {
+    display: none;
+}
+
 .page-box {
     width: 900px;
 }
@@ -68,14 +74,93 @@ h3 {
 .param {
     width: 60px;
     margin-left: 6px;
-    font-size: 11pt;
 }
 
 #rules {
     margin-top: 20px;
+    clear: both;
+}
+
+.simulation-box {
+    float: left;
+}
+
+.simulation-section {
+    float: left;
+    margin-bottom: 20px;
 }
 
 #tools {
     float:left;
     margin-left: 20px;
+}
+
+/* ------------------------------------------- Mobile ------------------------------------------- */
+
+@media (max-width: 900px), (hover: none) {
+    html {
+        font-size: var(--base-font-size-mobile);
+        line-height: 1.35;
+    }
+
+    body {
+        padding: 20px;
+    }
+
+    label {
+        font-size: var(--base-font-size-mobile);
+    }
+
+    button {
+        font-size: var(--base-font-size-mobile);
+        width: 90%;
+        margin-bottom: 20px;
+        padding: 12px;
+    }
+
+    hr.mobile {
+        display: block;
+        clear: both;
+    }
+
+    .animal-box {
+        float: left;
+        border: 1px solid black;
+        height: 40px;
+        width: 40px;
+        margin-right: 13px;
+        top: 10px;
+    }
+
+    .page-box {
+        width: 100%;
+    }
+
+    .param {
+        width: 150px;
+        margin-left: 6px;
+        font-size: 0.9rem;
+    }
+
+    .simulation-box {
+        margin-bottom: 40px;
+    }
+
+    .simulation-section {
+        float: none;
+    }
+
+    #tools {
+        margin-left: 0;
+        float: none;
+    }
+
+    #tools .buttons {
+        text-align: center;
+    }
+
+    .value-units {
+        display: block;
+        margin-left: 50px;
+    }
 }
