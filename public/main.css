@@ -97,7 +97,12 @@ button {
 
 /* ------------------------------------------- Mobile ------------------------------------------- */
 
-@media (max-width: 900px), (hover: none) {
+/* 
+    Activating based in viewport resolution doesn't work well since some smartphone resolutions
+    are very high. Activating instead if on a device that doesn't support pointer hovering,
+    such as a smartphone.
+*/
+@media (hover: none) {
     html {
         font-size: var(--base-font-size-mobile);
         line-height: 1.35;
