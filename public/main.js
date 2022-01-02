@@ -106,66 +106,65 @@ const wator = {};
     }
 
     /** Class for managing the grid and animals. */
-    function WatorWorld() {
-        const self = this;
-        self.grid = null;
-        self.ticker = null;
-        self.liveAnimals = null;
+    class WatorWorld {
+        grid = null;
+        ticker = null;
+        liveAnimals = null;
 
-        self.start = function() {
-            self.initializeWorld();
-            self.startTicker();
-        };
+        start() {
+            this.initializeWorld();
+            this.startTicker();
+        }
 
-        self.initializeWorld = function() {
-            self.grid = [];
+        initializeWorld() {
+            this.grid = [];
             for (let i = 0; i < SQUARES_WIDE; i++) {
-                self.grid[i] = [];
+                this.grid[i] = [];
             }
-            self.liveAnimals = new LinkedList();
+            this.liveAnimals = new LinkedList();
             canvas.fillStyle = EMPTY_SQUARE_COLOR;
             canvas.fillRect(0, 0, SQUARE_SIZE * SQUARES_WIDE, SQUARE_SIZE * SQUARES_WIDE);
-            self.initializeAnimals(FishTraits);
-            self.initializeAnimals(SharkTraits);
-        };
+            this.initializeAnimals(FishTraits);
+            this.initializeAnimals(SharkTraits);
+        }
 
-        self.initializeAnimals = function(animalTraits) {
+        initializeAnimals(animalTraits) {
             for (let animalsPlaced = 0; animalsPlaced < animalTraits.initialCount(); ) {
                 const randX = randInt(SQUARES_WIDE);
                 const randY = randInt(SQUARES_TALL);
 
-                if (self.grid[randX][randY]) {
+                if (this.grid[randX][randY]) {
                     continue;
                 }
 
-                self.addAnimal(animalTraits, randX, randY);
+                this.addAnimal(animalTraits, randX, randY);
                 animalsPlaced++;
             }
-        };
+        }
 
-        self.startTicker = function() {
-            self.ticker = setInterval(self.tick, TICK_SLEEP);
-        };
+        startTicker() {
+            this.ticker = setInterval(() => this.tick(), TICK_SLEEP);
+        }
 
-        self.stopTicker = function() {
-            clearInterval(self.ticker);
-            self.ticker = null;
-        };
+        stopTicker() {
+            clearInterval(this.ticker);
+            this.ticker = null;
+        }
 
-        self.destroy = function() {
-            self.stopTicker();
-        };
+        destroy() {
+            this.stopTicker();
+        }
 
-        self.pausePlay = function() {
-            if (self.ticker === null) {
-                self.startTicker();
+        pausePlay() {
+            if (this.ticker === null) {
+                this.startTicker();
             } else {
-                self.stopTicker();
+                this.stopTicker();
             }
-        };
+        }
 
-        self.tick = function() {
-            for (let animal = self.liveAnimals.first, done = false; !done && animal; ) {
+        tick() {
+            for (let animal = this.liveAnimals.first, done = false; !done && animal; ) {
                 done = !animal.next;
 
                 // get the next animal now in case this animal dies during the tick
@@ -177,9 +176,9 @@ const wator = {};
 
                 animal = (nextAnimal && nextAnimal.animalTraits) ? nextAnimal : secondNextAnimal;
             }
-        };
+        }
 
-        self.addAnimal = function(animalTraits, x, y) {
+        addAnimal(animalTraits, x, y) {
             const animal = {
                 x: x,
                 y: y,
@@ -188,29 +187,29 @@ const wator = {};
                 energy: animalTraits.randomEnergyLevel()
             };
 
-            self.liveAnimals.add(animal);
-            self.putAnimalOnGrid(animal);
-        };
+            this.liveAnimals.add(animal);
+            this.putAnimalOnGrid(animal);
+        }
 
-        self.removeAnimal = function(animal) {
+        removeAnimal(animal) {
             // mark as inactive
             animal.animalTraits = null;
-            self.liveAnimals.remove(animal);
-        };
+            this.liveAnimals.remove(animal);
+        }
 
-        self.putAnimalOnGrid = function(animal) {
-            self.grid[animal.x][animal.y] = animal;
+        putAnimalOnGrid(animal) {
+            this.grid[animal.x][animal.y] = animal;
             canvas.fillStyle = animal.animalTraits.color;
             canvas.fillRect(animal.x * SQUARE_SIZE, animal.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-        };
+        }
 
-        self.clearSquare = function(x, y) {
-            self.grid[x][y] = undefined;
+        clearSquare(x, y) {
+            this.grid[x][y] = undefined;
             canvas.fillStyle = EMPTY_SQUARE_COLOR;
             canvas.fillRect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-        };
+        }
 
-        self.getRelativeSquare = function(x, y, direction) {
+        getRelativeSquare(x, y, direction) {
             switch(direction) {
                 case UP:
                     if (y <= 0)
@@ -236,9 +235,9 @@ const wator = {};
                     console.error('Illegal direction: ' + direction);
                     return {x: x, y: y};
             }
-        };
+        }
 
-        self.move = function(animal, newX, newY) {
+        move(animal, newX, newY) {
             if (animal.reproductionCounter >= animal.animalTraits.reproductionPeriod()) {
                 const oldX = animal.x;
                 const oldY = animal.y;
@@ -246,16 +245,16 @@ const wator = {};
                 animal.x = newX;
                 animal.y = newY;
                 animal.reproductionCounter = 0;
-                self.putAnimalOnGrid(animal);
+                this.putAnimalOnGrid(animal);
 
-                self.addAnimal(animal.animalTraits, oldX, oldY);
+                this.addAnimal(animal.animalTraits, oldX, oldY);
             } else {
-                self.clearSquare(animal.x, animal.y);
+                this.clearSquare(animal.x, animal.y);
                 animal.x = newX;
                 animal.y = newY;
-                self.putAnimalOnGrid(animal);
+                this.putAnimalOnGrid(animal);
             }
-        };
+        }
     }
 
     const FishTraits = {
@@ -323,47 +322,47 @@ const wator = {};
         }
     };
 
-    function LinkedList() {
-        this.first = null;
-        this.last = null;
-        this.size = 0;
-    }
+    class LinkedList {
+        first = null;
+        last = null;
+        size = 0;
 
-    LinkedList.prototype.add = function(node) {
-        if (this.last) {
-            this.last.next = node;
-            node.previous = this.last;
-        } else {
-            this.first = node;
+        add(node) {
+            if (this.last) {
+                this.last.next = node;
+                node.previous = this.last;
+            } else {
+                this.first = node;
+                node.previous = null;
+            }
+
+            this.last = node;
+            node.next = null;
+
+            this.size++;
+        }
+
+        remove(node) {
+            if (node.previous) {
+                node.previous.next = node.next;
+            }
+
+            if (node.next) {
+                node.next.previous = node.previous;
+            }
+
+            if (this.first === node) {
+                this.first = node.next;
+            }
+
+            if (this.last === node) {
+                this.last = node.previous;
+            }
+
+            node.next = null;
             node.previous = null;
+
+            this.size--;
         }
-
-        this.last = node;
-        node.next = null;
-
-        this.size++;
-    };
-
-    LinkedList.prototype.remove = function(node) {
-        if (node.previous) {
-            node.previous.next = node.next;
-        }
-
-        if (node.next) {
-            node.next.previous = node.previous;
-        }
-
-        if (this.first === node) {
-            this.first = node.next;
-        }
-
-        if (this.last === node) {
-            this.last = node.previous;
-        }
-
-        node.next = null;
-        node.previous = null;
-
-        this.size--;
-    };
+    }
 }());
