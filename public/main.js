@@ -9,39 +9,39 @@
 
 'use strict';
 
-var wator = {};
+const wator = {};
 
 (function() {
-    var SQUARE_SIZE = 2;
-    var SQUARES_WIDE = 230;
-    var SQUARES_TALL = 170;
-    var EMPTY_SQUARE_COLOR = '#999';
-    var FISH_COLOR = '#0E0';
-    var SHARK_COLOR = '#00F';
-    var TICK_SLEEP = 40;
-    var UP = 0;
-    var RIGHT = 1;
-    var DOWN = 2;
-    var LEFT = 3;
+    const SQUARE_SIZE = 2;
+    const SQUARES_WIDE = 230;
+    const SQUARES_TALL = 170;
+    const EMPTY_SQUARE_COLOR = '#999';
+    const FISH_COLOR = '#0E0';
+    const SHARK_COLOR = '#00F';
+    const TICK_SLEEP = 40;
+    const UP = 0;
+    const RIGHT = 1;
+    const DOWN = 2;
+    const LEFT = 3;
 
-    var initialFishCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 6);
-    var initialSharkCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 200);
-    var fishReproductionPeriod = 130;
-    var sharkReproductionPeriod = 50;
-    var sharkEnergyPerFish = 2;
-    var maxSharkEnergy = 48;
-    var canvas;
+    let initialFishCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 6);
+    let initialSharkCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 200);
+    let fishReproductionPeriod = 130;
+    let sharkReproductionPeriod = 50;
+    let sharkEnergyPerFish = 2;
+    let maxSharkEnergy = 48;
+    let canvas;
 
     wator.start = function() {
-        var canvasElement = document.getElementById('main-canvas');
+        const canvasElement = document.getElementById('main-canvas');
 
         if (!canvasElement || !canvasElement.getContext) {
             console.error('Canvas not found or not supported');
             return;
         }
 
-        canvasElement.setAttribute('width', (SQUARES_WIDE * SQUARE_SIZE) + "");
-        canvasElement.setAttribute('height', (SQUARES_TALL * SQUARE_SIZE) + "");
+        canvasElement.setAttribute('width', (SQUARES_WIDE * SQUARE_SIZE) + '');
+        canvasElement.setAttribute('height', (SQUARES_TALL * SQUARE_SIZE) + '');
 
         canvas = canvasElement.getContext('2d');
 
@@ -60,9 +60,9 @@ var wator = {};
     };
 
     wator.loadValuesFromUI = function() {
-        var oldInitialFishCount = initialFishCount;
-        var oldInitialSharkCount = initialSharkCount;
-        
+        const oldInitialFishCount = initialFishCount;
+        const oldInitialSharkCount = initialSharkCount;
+
         initialFishCount = parseInt(document.getElementById('fish-initial-count').value, 10);
         initialSharkCount = parseInt(document.getElementById('shark-initial-count').value, 10);
         fishReproductionPeriod = parseInt(document.getElementById('fish-reproduction-period').value, 10);
@@ -74,7 +74,7 @@ var wator = {};
             initialFishCount = oldInitialFishCount;
             initialSharkCount = oldInitialSharkCount;
             wator.populateUIFields();
-            console.log("Initial counts of fish and sharks exceeded the grid size");
+            console.log('Initial counts of fish and sharks exceeded the grid size');
         }
     };
 
@@ -96,8 +96,8 @@ var wator = {};
 
     /** Randomly execute the predicate for each direction until it returns true. */
     function eachDirectionUntil(predicate) {
-        var direction = randInt(4);
-        for (var i = 0; i < 4; i++) {
+        let direction = randInt(4);
+        for (let i = 0; i < 4; i++) {
             direction = (direction + i) % 4;
             if (predicate(direction)) {
                 break;
@@ -107,7 +107,7 @@ var wator = {};
 
     /** Class for managing the grid and animals. */
     function WatorWorld() {
-        var self = this;
+        const self = this;
         self.grid = null;
         self.ticker = null;
         self.liveAnimals = null;
@@ -119,7 +119,7 @@ var wator = {};
 
         self.initializeWorld = function() {
             self.grid = [];
-            for (var i = 0; i < SQUARES_WIDE; i++) {
+            for (let i = 0; i < SQUARES_WIDE; i++) {
                 self.grid[i] = [];
             }
             self.liveAnimals = new LinkedList();
@@ -130,9 +130,9 @@ var wator = {};
         };
 
         self.initializeAnimals = function(animalTraits) {
-            for (var animalsPlaced = 0; animalsPlaced < animalTraits.initialCount(); ) {
-                var randX = randInt(SQUARES_WIDE);
-                var randY = randInt(SQUARES_TALL);
+            for (let animalsPlaced = 0; animalsPlaced < animalTraits.initialCount(); ) {
+                const randX = randInt(SQUARES_WIDE);
+                const randY = randInt(SQUARES_TALL);
 
                 if (self.grid[randX][randY]) {
                     continue;
@@ -165,13 +165,13 @@ var wator = {};
         };
 
         self.tick = function() {
-            for (var animal = self.liveAnimals.first, done = false; !done && animal; ) {
+            for (let animal = self.liveAnimals.first, done = false; !done && animal; ) {
                 done = !animal.next;
 
                 // get the next animal now in case this animal dies during the tick
-                var nextAnimal = animal.next;
+                const nextAnimal = animal.next;
                 // get the next, next animal now in case the next animal is eaten during the tick
-                var secondNextAnimal = animal.next ? animal.next.next : null;
+                const secondNextAnimal = animal.next ? animal.next.next : null;
 
                 animal.animalTraits.tick(animal);
 
@@ -180,7 +180,7 @@ var wator = {};
         };
 
         self.addAnimal = function(animalTraits, x, y) {
-            var animal = {
+            const animal = {
                 x: x,
                 y: y,
                 animalTraits: animalTraits,
@@ -240,8 +240,8 @@ var wator = {};
 
         self.move = function(animal, newX, newY) {
             if (animal.reproductionCounter >= animal.animalTraits.reproductionPeriod()) {
-                var oldX = animal.x;
-                var oldY = animal.y;
+                const oldX = animal.x;
+                const oldY = animal.y;
 
                 animal.x = newX;
                 animal.y = newY;
@@ -258,7 +258,7 @@ var wator = {};
         };
     }
 
-    var FishTraits = {
+    const FishTraits = {
         color: FISH_COLOR,
         initialCount: function() { return initialFishCount },
         randomEnergyLevel: function() {},
@@ -266,7 +266,7 @@ var wator = {};
         reproductionPeriod: function() { return fishReproductionPeriod },
         tick: function(animal) {
             eachDirectionUntil(function(direction) {
-                var destinationSquare = wator.watorWorld.getRelativeSquare(animal.x, animal.y, direction);
+                const destinationSquare = wator.watorWorld.getRelativeSquare(animal.x, animal.y, direction);
                 if (!wator.watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
                     wator.watorWorld.move(animal, destinationSquare.x, destinationSquare.y);
                     return true;
@@ -277,18 +277,18 @@ var wator = {};
         }
     };
 
-    var SharkTraits = {
+    const SharkTraits = {
         color: SHARK_COLOR,
         initialCount: function() { return initialSharkCount },
         randomEnergyLevel: function() { return randInt(maxSharkEnergy) },
         randomReproductionCounter: function() { return randInt(sharkReproductionPeriod) },
         reproductionPeriod: function() { return sharkReproductionPeriod },
         tick: function(shark) {
-            var hasEaten = false;
+            let hasEaten = false;
 
             eachDirectionUntil(function(direction) {
-                var destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
-                var possibleFish = wator.watorWorld.grid[destinationSquare.x][destinationSquare.y];
+                const destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
+                const possibleFish = wator.watorWorld.grid[destinationSquare.x][destinationSquare.y];
                 if (possibleFish && possibleFish.animalTraits === FishTraits) {
                     wator.watorWorld.removeAnimal(possibleFish);
                     shark.energy += sharkEnergyPerFish;
@@ -306,7 +306,7 @@ var wator = {};
 
             if (!hasEaten) {
                 eachDirectionUntil(function(direction) {
-                    var destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
+                    const destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
                     if (!wator.watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
                         wator.watorWorld.move(shark, destinationSquare.x, destinationSquare.y);
                         return true;
