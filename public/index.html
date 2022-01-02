@@ -3,6 +3,8 @@
 <head>
     <title>Wa-Tor</title>
     <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
     <meta name="description" content="An implementation of Alexander Keewatin Dewdney's Wa-Tor simulation">
     <link rel="stylesheet" href="main.css">
 
@@ -28,7 +30,7 @@
     </p>
     <div class="simulation-section">
         <div class="simulation-box">
-            <canvas id="main-canvas" width="400" height="400">
+            <canvas id="main-canvas" width="300" height="300">
                 This component requires a modern browser that supports &lt;canvas&gt;.
             </canvas>
             <div id="legend">
@@ -39,27 +41,27 @@
         </div>
         <hr class="mobile">
         <div id="tools">
-            <div>
+            <div class="tool-row">
                 <label for="fish-initial-count">Initial fish count:</label>
                 <span class="value-units"><input type="number" id="fish-initial-count" class="param"></span>
             </div>
-            <div>
+            <div class="tool-row">
                 <label for="shark-initial-count">Initial shark count:</label>
                 <span class="value-units"><input type="number" id="shark-initial-count" class="param"></span>
             </div>
-            <div>
+            <div class="tool-row">
                 <label for="fish-reproduction-period">Fish reproduction period:</label>
                 <span class="value-units"><input type="number" id="fish-reproduction-period" class="param"> chronons</span>
             </div>
-            <div>
+            <div class="tool-row">
                 <label for="shark-reproduction-period">Shark reproduction period:</label>
                 <span class="value-units"><input type="number" id="shark-reproduction-period" class="param"> chronons</span>
             </div>
-            <div>
+            <div class="tool-row">
                 <label for="max-shark-energy">Max shark energy:</label>
                 <span class="value-units"><input type="number" id="max-shark-energy" class="param"> chronons</span>
             </div>
-            <div>
+            <div class="tool-row">
                 <label for="shark-energy-per-fish">Shark energy per fish eaten:</label>
                 <span class="value-units"><input type="number" id="shark-energy-per-fish" class="param"> chronons</span>
             </div>
@@ -77,7 +79,6 @@
             </div>
         </div>
     </div>
-    <!--        <br class="clear-float">-->
     <hr class="mobile">
     <div id="rules">
         <h3>Rules for the fish</h3>

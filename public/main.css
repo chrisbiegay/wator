@@ -1,10 +1,9 @@
 :root {
-    --base-font-size-desktop: 16px;
-    --base-font-size-mobile: 50px;
+    --base-font-size: 16px;
 }
 
 html {
-    font-size: var(--base-font-size-desktop);
+    font-size: var(--base-font-size);
     font-family: sans-serif;
     line-height: 1.25;
 }
@@ -97,27 +96,12 @@ button {
 
 /* ------------------------------------------- Mobile ------------------------------------------- */
 
-/* 
-    Activating based in viewport resolution doesn't work well since some smartphone resolutions
-    are very high. Activating instead if on a device that doesn't support pointer hovering,
-    such as a smartphone.
-*/
-@media (hover: none) {
-    html {
-        font-size: var(--base-font-size-mobile);
-        line-height: 1.35;
-    }
-
-    body {
-        padding: 20px;
-    }
-
-    label {
-        font-size: var(--base-font-size-mobile);
+@media (max-width: 920px) {
+    .tool-row {
+        margin-bottom: 10px;
     }
 
     button {
-        font-size: var(--base-font-size-mobile);
         width: 90%;
         margin-bottom: 20px;
         padding: 12px;
@@ -126,15 +110,6 @@ button {
     hr.mobile {
         display: block;
         clear: both;
-    }
-
-    .animal-box {
-        float: left;
-        border: 1px solid black;
-        height: 40px;
-        width: 40px;
-        margin-right: 13px;
-        top: 10px;
     }
 
     .page-box {
@@ -166,6 +141,6 @@ button {
 
     .value-units {
         display: block;
-        margin-left: 50px;
+        margin-left: 10px;
     }
 }

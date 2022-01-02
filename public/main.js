@@ -13,8 +13,8 @@ const wator = {};
 
 (function() {
     const SQUARE_SIZE = 2;
-    const SQUARES_WIDE = 230;
-    const SQUARES_TALL = 170;
+    const NUM_COLUMNS = determineNumberOfGridColumns();
+    const NUM_ROWS = 170;
     const EMPTY_SQUARE_COLOR = '#999';
     const FISH_COLOR = '#0E0';
     const SHARK_COLOR = '#00F';
@@ -24,8 +24,8 @@ const wator = {};
     const DOWN = 2;
     const LEFT = 3;
 
-    let initialFishCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 6);
-    let initialSharkCount = Math.ceil(SQUARES_WIDE * SQUARES_TALL / 200);
+    let initialFishCount = Math.ceil(NUM_COLUMNS * NUM_ROWS / 6);
+    let initialSharkCount = Math.ceil(NUM_COLUMNS * NUM_ROWS / 200);
     let fishReproductionPeriod = 130;
     let sharkReproductionPeriod = 50;
     let sharkEnergyPerFish = 2;
@@ -40,8 +40,8 @@ const wator = {};
             return;
         }
 
-        canvasElement.setAttribute('width', (SQUARES_WIDE * SQUARE_SIZE) + '');
-        canvasElement.setAttribute('height', (SQUARES_TALL * SQUARE_SIZE) + '');
+        canvasElement.setAttribute('width', (NUM_COLUMNS * SQUARE_SIZE) + '');
+        canvasElement.setAttribute('height', (NUM_ROWS * SQUARE_SIZE) + '');
 
         canvas = canvasElement.getContext('2d');
 
@@ -70,7 +70,7 @@ const wator = {};
         maxSharkEnergy = parseInt(document.getElementById('max-shark-energy').value, 10);
         sharkEnergyPerFish = parseInt(document.getElementById('shark-energy-per-fish').value, 10);
 
-        if (initialFishCount + initialSharkCount > SQUARES_WIDE * SQUARES_TALL) {
+        if (initialFishCount + initialSharkCount > NUM_COLUMNS * NUM_ROWS) {
             initialFishCount = oldInitialFishCount;
             initialSharkCount = oldInitialSharkCount;
             wator.populateUIFields();
@@ -88,6 +88,16 @@ const wator = {};
     wator.pausePlay = function() {
         wator.watorWorld.pausePlay();
     };
+
+    function determineNumberOfGridColumns() {
+        if (document.body.clientWidth < 500) {
+            // fit the width of the screen
+            return Math.ceil(document.body.clientWidth / 2) - 1
+        } else {
+            // for desktop / wide screen viewports
+            return 230;
+        }
+    }
 
     /** Random int from zero to max, exclusive. */
     function randInt(max) {
@@ -118,20 +128,20 @@ const wator = {};
 
         initializeWorld() {
             this.grid = [];
-            for (let i = 0; i < SQUARES_WIDE; i++) {
+            for (let i = 0; i < NUM_COLUMNS; i++) {
                 this.grid[i] = [];
             }
             this.liveAnimals = new LinkedList();
             canvas.fillStyle = EMPTY_SQUARE_COLOR;
-            canvas.fillRect(0, 0, SQUARE_SIZE * SQUARES_WIDE, SQUARE_SIZE * SQUARES_WIDE);
+            canvas.fillRect(0, 0, SQUARE_SIZE * NUM_COLUMNS, SQUARE_SIZE * NUM_COLUMNS);
             this.initializeAnimals(FishTraits);
             this.initializeAnimals(SharkTraits);
         }
 
         initializeAnimals(animalTraits) {
             for (let animalsPlaced = 0; animalsPlaced < animalTraits.initialCount(); ) {
-                const randX = randInt(SQUARES_WIDE);
-                const randY = randInt(SQUARES_TALL);
+                const randX = randInt(NUM_COLUMNS);
+                const randY = randInt(NUM_ROWS);
 
                 if (this.grid[randX][randY]) {
                     continue;
@@ -213,22 +223,22 @@ const wator = {};
             switch(direction) {
                 case UP:
                     if (y <= 0)
-                        return {x: x, y: SQUARES_TALL - 1};  // wrap
+                        return {x: x, y: NUM_ROWS - 1};  // wrap
                     else
                         return {x: x, y: y - 1};
                 case RIGHT:
-                    if (x >= SQUARES_WIDE - 1)
+                    if (x >= NUM_COLUMNS - 1)
                         return {x: 0, y: y};
                     else
                         return {x: x + 1, y: y};
                 case DOWN:
-                    if (y >= SQUARES_TALL - 1)
+                    if (y >= NUM_ROWS - 1)
                         return {x: x, y: 0};
                     else
                         return {x: x, y: y + 1};
                 case LEFT:
                     if (x <= 0)
-                        return {x: SQUARES_WIDE - 1, y: y};
+                        return {x: NUM_COLUMNS - 1, y: y};
                     else
                         return {x: x - 1, y: y};
                 default:
