@@ -22,21 +22,22 @@ const wator = {};
     const DOWN = 2;
     const LEFT = 3;
 
-    let fishReproductionPeriod = 130;
-    let sharkReproductionPeriod = 50;
+    let fishReproductionPeriod = 70;
+    let sharkReproductionPeriod = 10;
     let sharkEnergyPerFish = 3;
-    let maxSharkEnergy = 48;
+    let maxSharkEnergy = 9;
     let numRows;
     let numColumns;
     let initialFishCount;
     let initialSharkCount;
     let canvas;
+    let watorWorld;
 
     wator.initialize = function() {
         numRows = 170;
         numColumns = determineNumberOfGridColumns();
-        initialFishCount = Math.ceil(numColumns * numRows / 6);
-        initialSharkCount = Math.ceil(numColumns * numRows / 200);
+        initialFishCount = Math.ceil(numColumns * numRows / 4);
+        initialSharkCount = Math.ceil(numColumns * numRows / 100);
 
         const canvasElement = document.getElementById('main-canvas');
 
@@ -50,18 +51,10 @@ const wator = {};
 
         canvas = canvasElement.getContext('2d');
 
-        wator.populateUIFields();
-        wator.watorWorld = new WatorWorld();
-        wator.watorWorld.start();
-    };
+        populateUIFields();
 
-    wator.populateUIFields = function() {
-        document.getElementById('fish-initial-count').value = initialFishCount;
-        document.getElementById('shark-initial-count').value = initialSharkCount;
-        document.getElementById('fish-reproduction-period').value = fishReproductionPeriod;
-        document.getElementById('shark-reproduction-period').value = sharkReproductionPeriod;
-        document.getElementById('max-shark-energy').value = maxSharkEnergy;
-        document.getElementById('shark-energy-per-fish').value = sharkEnergyPerFish;
+        watorWorld = new WatorWorld();
+        watorWorld.start();
     };
 
     wator.loadValuesFromUI = function() {
@@ -85,13 +78,13 @@ const wator = {};
 
     wator.resetWorld = function() {
         wator.loadValuesFromUI();
-        wator.watorWorld.destroy();
-        wator.watorWorld = new WatorWorld();
-        wator.watorWorld.start();
+        watorWorld.destroy();
+        watorWorld = new WatorWorld();
+        watorWorld.start();
     };
 
     wator.pausePlay = function() {
-        wator.watorWorld.pausePlay();
+        watorWorld.pausePlay();
     };
 
     function determineNumberOfGridColumns() {
@@ -105,6 +98,15 @@ const wator = {};
             // for desktop / wide screen viewports
             return 230;
         }
+    }
+
+    function populateUIFields() {
+        document.getElementById('fish-initial-count').value = initialFishCount;
+        document.getElementById('shark-initial-count').value = initialSharkCount;
+        document.getElementById('fish-reproduction-period').value = fishReproductionPeriod;
+        document.getElementById('shark-reproduction-period').value = sharkReproductionPeriod;
+        document.getElementById('max-shark-energy').value = maxSharkEnergy;
+        document.getElementById('shark-energy-per-fish').value = sharkEnergyPerFish;
     }
 
     /** Random int from zero to max, exclusive. */
@@ -283,9 +285,9 @@ const wator = {};
         reproductionPeriod: function() { return fishReproductionPeriod },
         tick: function(animal) {
             eachDirectionUntil(function(direction) {
-                const destinationSquare = wator.watorWorld.getRelativeSquare(animal.x, animal.y, direction);
-                if (!wator.watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
-                    wator.watorWorld.move(animal, destinationSquare.x, destinationSquare.y);
+                const destinationSquare = watorWorld.getRelativeSquare(animal.x, animal.y, direction);
+                if (!watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
+                    watorWorld.move(animal, destinationSquare.x, destinationSquare.y);
                     return true;
                 }
             });
@@ -304,10 +306,10 @@ const wator = {};
             let hasEaten = false;
 
             eachDirectionUntil(function(direction) {
-                const destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
-                const possibleFish = wator.watorWorld.grid[destinationSquare.x][destinationSquare.y];
+                const destinationSquare = watorWorld.getRelativeSquare(shark.x, shark.y, direction);
+                const possibleFish = watorWorld.grid[destinationSquare.x][destinationSquare.y];
                 if (possibleFish && possibleFish.animalTraits === FishTraits) {
-                    wator.watorWorld.removeAnimal(possibleFish);
+                    watorWorld.removeAnimal(possibleFish);
                     shark.energy += sharkEnergyPerFish;
                     // limit a shark's energy
                     if (shark.energy > maxSharkEnergy) {
@@ -315,7 +317,7 @@ const wator = {};
                     }
 
                     hasEaten = true;
-                    wator.watorWorld.move(shark, destinationSquare.x, destinationSquare.y);
+                    watorWorld.move(shark, destinationSquare.x, destinationSquare.y);
                 }
 
                 return hasEaten;
@@ -323,9 +325,9 @@ const wator = {};
 
             if (!hasEaten) {
                 eachDirectionUntil(function(direction) {
-                    const destinationSquare = wator.watorWorld.getRelativeSquare(shark.x, shark.y, direction);
-                    if (!wator.watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
-                        wator.watorWorld.move(shark, destinationSquare.x, destinationSquare.y);
+                    const destinationSquare = watorWorld.getRelativeSquare(shark.x, shark.y, direction);
+                    if (!watorWorld.grid[destinationSquare.x][destinationSquare.y]) {
+                        watorWorld.move(shark, destinationSquare.x, destinationSquare.y);
                         return true;
                     }
                 });
@@ -334,8 +336,8 @@ const wator = {};
             shark.reproductionCounter++;
 
             if (--shark.energy <= 0) {
-                wator.watorWorld.clearSquare(shark.x, shark.y);
-                wator.watorWorld.removeAnimal(shark);
+                watorWorld.clearSquare(shark.x, shark.y);
+                watorWorld.removeAnimal(shark);
             }
         }
     };
