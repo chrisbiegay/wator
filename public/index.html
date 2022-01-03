@@ -3,10 +3,9 @@
 <head>
     <title>Wa-Tor</title>
     <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="An implementation of Alexander Keewatin Dewdney's Wa-Tor simulation">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="main.css?v=2">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158658276-1"></script>
@@ -18,7 +17,7 @@
         gtag('config', 'UA-158658276-1', { 'optimize_id': 'GTM-T7MSLL3'});
     </script>
 </head>
-<body onload="wator.start()">
+<body onload="wator.initialize()">
 <div class="page-box">
     <h1>Wa-Tor</h1>
     <hr>
@@ -103,9 +102,11 @@
     </div>
     <div>
         (<a href="https://github.com/chrisbiegay/wator">Source code</a>)
+        <br>
+        <br>
     </div>
 
-    <script src="main.js"></script>
+    <script src="main.js?v=2"></script>
 </div>
 </body>
 </html>

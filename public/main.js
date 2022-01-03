@@ -13,8 +13,6 @@ const wator = {};
 
 (function() {
     const SQUARE_SIZE = 2;
-    const NUM_COLUMNS = determineNumberOfGridColumns();
-    const NUM_ROWS = 170;
     const EMPTY_SQUARE_COLOR = '#999';
     const FISH_COLOR = '#0E0';
     const SHARK_COLOR = '#00F';
@@ -24,15 +22,22 @@ const wator = {};
     const DOWN = 2;
     const LEFT = 3;
 
-    let initialFishCount = Math.ceil(NUM_COLUMNS * NUM_ROWS / 6);
-    let initialSharkCount = Math.ceil(NUM_COLUMNS * NUM_ROWS / 200);
     let fishReproductionPeriod = 130;
     let sharkReproductionPeriod = 50;
-    let sharkEnergyPerFish = 2;
+    let sharkEnergyPerFish = 3;
     let maxSharkEnergy = 48;
+    let numRows;
+    let numColumns;
+    let initialFishCount;
+    let initialSharkCount;
     let canvas;
 
-    wator.start = function() {
+    wator.initialize = function() {
+        numRows = 170;
+        numColumns = determineNumberOfGridColumns();
+        initialFishCount = Math.ceil(numColumns * numRows / 6);
+        initialSharkCount = Math.ceil(numColumns * numRows / 200);
+
         const canvasElement = document.getElementById('main-canvas');
 
         if (!canvasElement || !canvasElement.getContext) {
@@ -40,8 +45,8 @@ const wator = {};
             return;
         }
 
-        canvasElement.setAttribute('width', (NUM_COLUMNS * SQUARE_SIZE) + '');
-        canvasElement.setAttribute('height', (NUM_ROWS * SQUARE_SIZE) + '');
+        canvasElement.setAttribute('width', (numColumns * SQUARE_SIZE) + '');
+        canvasElement.setAttribute('height', (numRows * SQUARE_SIZE) + '');
 
         canvas = canvasElement.getContext('2d');
 
@@ -70,7 +75,7 @@ const wator = {};
         maxSharkEnergy = parseInt(document.getElementById('max-shark-energy').value, 10);
         sharkEnergyPerFish = parseInt(document.getElementById('shark-energy-per-fish').value, 10);
 
-        if (initialFishCount + initialSharkCount > NUM_COLUMNS * NUM_ROWS) {
+        if (initialFishCount + initialSharkCount > numColumns * numRows) {
             initialFishCount = oldInitialFishCount;
             initialSharkCount = oldInitialSharkCount;
             wator.populateUIFields();
@@ -90,6 +95,9 @@ const wator = {};
     };
 
     function determineNumberOfGridColumns() {
+        console.debug(`document.body.clientWidth: ${document.body.clientWidth}`);
+        console.debug(`window.innerWidth: ${window.innerWidth}`);
+
         if (document.body.clientWidth < 500) {
             // fit the width of the screen
             return Math.ceil(document.body.clientWidth / 2) - 1
@@ -128,20 +136,20 @@ const wator = {};
 
         initializeWorld() {
             this.grid = [];
-            for (let i = 0; i < NUM_COLUMNS; i++) {
+            for (let i = 0; i < numColumns; i++) {
                 this.grid[i] = [];
             }
             this.liveAnimals = new LinkedList();
             canvas.fillStyle = EMPTY_SQUARE_COLOR;
-            canvas.fillRect(0, 0, SQUARE_SIZE * NUM_COLUMNS, SQUARE_SIZE * NUM_COLUMNS);
+            canvas.fillRect(0, 0, SQUARE_SIZE * numColumns, SQUARE_SIZE * numColumns);
             this.initializeAnimals(FishTraits);
             this.initializeAnimals(SharkTraits);
         }
 
         initializeAnimals(animalTraits) {
             for (let animalsPlaced = 0; animalsPlaced < animalTraits.initialCount(); ) {
-                const randX = randInt(NUM_COLUMNS);
-                const randY = randInt(NUM_ROWS);
+                const randX = randInt(numColumns);
+                const randY = randInt(numRows);
 
                 if (this.grid[randX][randY]) {
                     continue;
@@ -223,22 +231,22 @@ const wator = {};
             switch(direction) {
                 case UP:
                     if (y <= 0)
-                        return {x: x, y: NUM_ROWS - 1};  // wrap
+                        return {x: x, y: numRows - 1};  // wrap
                     else
                         return {x: x, y: y - 1};
                 case RIGHT:
-                    if (x >= NUM_COLUMNS - 1)
+                    if (x >= numColumns - 1)
                         return {x: 0, y: y};
                     else
                         return {x: x + 1, y: y};
                 case DOWN:
-                    if (y >= NUM_ROWS - 1)
+                    if (y >= numRows - 1)
                         return {x: x, y: 0};
                     else
                         return {x: x, y: y + 1};
                 case LEFT:
                     if (x <= 0)
-                        return {x: NUM_COLUMNS - 1, y: y};
+                        return {x: numColumns - 1, y: y};
                     else
                         return {x: x - 1, y: y};
                 default:

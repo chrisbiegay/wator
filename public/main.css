@@ -101,10 +101,11 @@ button {
         margin-bottom: 10px;
     }
 
-    button {
+    #tools button {
         width: 90%;
         margin-bottom: 20px;
-        padding: 12px;
+        height: 40px;
+        font-size: var(--base-font-size);
     }
 
     hr.mobile {
